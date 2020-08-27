@@ -31,7 +31,7 @@ const getClient = (sessionData) => {
     const newClient = new Client({
       session: sessionData,
       takeoverOnConflict: true,
-      takeoverTimeoutMs: 5000,
+      takeoverTimeoutMs: 30000,
       restartOnAuthFail: true,
       ...additionalOptions,
     });
@@ -39,7 +39,7 @@ const getClient = (sessionData) => {
   }
   const newClient = new Client({
     takeoverOnConflict: true,
-    takeoverTimeoutMs: 5000,
+    takeoverTimeoutMs: 30000,
     restartOnAuthFail: true,
     ...additionalOptions,
   });
