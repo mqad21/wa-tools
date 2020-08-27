@@ -1,0 +1,9 @@
+/app
+/client
+/node_modules
+/*.csv
+/session.json
+/compile.js
+/app.js
+/public
+/wa-tools.exe

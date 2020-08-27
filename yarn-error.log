@@ -1,0 +1,67 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @nivo/line --save
+
+PATH: 
+  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files (x86)\Yarn\bin\;C:\Users\Qadri\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Qadri\AppData\Local\Microsoft\WindowsApps;C:\Users\Qadri\AppData\Local\Programs\Microsoft VS Code\bin;Git\bin\;Git\cmd\;C:\Users\Qadri\AppData\Roaming\npm;C:\Users\Qadri\AppData\Roaming\Composer\vendor\bin;C:\Users\Qadri\AppData\Local\Yarn\bin;C:\ProgramData\ComposerSetup\bin;C:\xampp\php\ext;C:\Users\Qadri\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\MongoDB\Server\4.2\bin;
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EBUSY: resource busy or locked, rmdir 'F:\Projects\Puppeteer\wa-tools\node_modules\whatsapp-web.js\node_modules\puppeteer\.local-chromium\win64-756035\chrome-win'
+
+npm manifest: 
+  {
+    "name": "wa-tools",
+    "version": "1.0.0",
+    "description": "A simple whatsapp tools",
+    "main": "server.js",
+    "scripts": {
+      "client-install": "cd client && npm install",
+      "start": "node server.js",
+      "server": "nodemon server.js",
+      "client": "npm start --prefix client",
+      "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "author": "Brad Traversy",
+    "license": "MIT",
+    "devDependencies": {
+      "electron": "^9.1.1",
+      "electron-packager": "^15.0.0",
+      "nodemon": "^1.14.6"
+    },
+    "dependencies": {
+      "@nivo/line": "^0.62.0",
+      "body-parser": "^1.19.0",
+      "child_process": "^1.0.2",
+      "concurrently": "^3.5.1",
+      "cors": "^2.8.5",
+      "express": "^4.16.2",
+      "jsonfile": "^6.0.1",
+      "nexe": "^3.3.7",
+      "node-static": "^0.7.11",
+      "opn": "^6.0.0",
+      "path": "^0.12.7",
+      "socket.io": "^2.3.0",
+      "whatsapp-web.js": "^1.7.0"
+    },
+    "nodemonConfig": {
+      "ignore": [
+        "session.json",
+        "app/*",
+        "client/*"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
