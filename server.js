@@ -1,7 +1,9 @@
+console.log("WELCOME TO WHATSAPP TOOLS - by mqad21"); //dekstop
+
 const express = require("express");
 const cors = require("cors");
 const { Client } = require("whatsapp-web.js");
-const opn = require("opn");
+// const opn = require("opn");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -18,67 +20,70 @@ const isNewClient = (sessionData) => {
 const getClient = (sessionData) => {
   const additionalOptions = {
     puppeteer: {
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--single-process",
-      ],
+      args: ["--no-sandbox"],
     },
+  };
+
+  const mainOptions = {
+    takeoverOnConflict: true,
+    takeoverTimeoutMs: 30000,
+    restartOnAuthFail: true,
+    authTimeoutMs: 30000,
   };
 
   if (sessionData) {
     const newClient = new Client({
       session: sessionData,
-      takeoverOnConflict: true,
-      takeoverTimeoutMs: 30000,
-      restartOnAuthFail: true,
+      ...mainOptions,
       ...additionalOptions,
     });
     return newClient;
   }
   const newClient = new Client({
-    takeoverOnConflict: true,
-    takeoverTimeoutMs: 30000,
-    restartOnAuthFail: true,
+    ...mainOptions,
     ...additionalOptions,
   });
-  // clients[sessionData.WABrowserId] = newClient;
   return newClient;
 };
 
 io.on("connection", (socket) => {
+  const n = parseInt(socket.handshake.query.n);
+  if (n !== 1) {
+    console.log("clear old client");
+    io.sockets.emit("clear");
+    return;
+  }
   socket.on("start", async (sessionJSON, setSession) => {
     try {
       const sessionData = JSON.parse(sessionJSON);
       const newClient = isNewClient(sessionData);
-
+      if (sessionData) clients[sessionData.WABrowserId] = true;
       if (newClient) {
+        console.log("New client started");
+
         const client = getClient(sessionData);
 
         client.on("auth_failure", (message) => {
-          socket.emit("error", message);
-          console.log(message);
+          socket.emit("fail", message);
           clients[sessionData.WABrowserId] = null;
         });
 
         client.on("disconnected", (state) => {
           const message = `Client disconnected [${state}]`;
-          socket.emit("error", message);
+          socket.emit("fail", message);
           console.log(message);
           clients[sessionData.WABrowserId] = null;
         });
 
         client.on("change_state", (reason) => {
-          const message = `Client change state [${reason}]`;
-          socket.emit("error", message);
+          const message = `Client state changed [${reason}]`;
           console.log(message);
-          clients[sessionData.WABrowserId] = null;
         });
 
         client.on("qr", (qr) => {
-          socket.emit("fetch-qr", qr);
-          console.log("Fetching QR...");
+          if (socket && qr) {
+            socket.emit("fetch-qr", qr);
+          }
         });
 
         client.on("ready", () => {
@@ -91,31 +96,37 @@ io.on("connection", (socket) => {
           socket.emit("stop-qr");
           console.log("Authenticated!");
           setSession(JSON.stringify(session));
-          clients[session.WABrowserId] = client;
+          clients[session.WABrowserId] = true;
+
+          socket.on("leave", () => {
+            console.log("Client left");
+            socket.disconnect();
+            client.destroy();
+            if (session) {
+              if (session.WABrowserId) {
+                console.log("Client removed");
+                delete clients[session.WABrowserId];
+              }
+            }
+          });
+        });
+
+        socket.on("leave", () => {
+          console.log("Client left");
+          client.destroy();
+          if (sessionData) {
+            if (sessionData.WABrowserId) {
+              console.log("Client removed");
+              delete clients[sessionData.WABrowserId];
+            }
+          }
         });
 
         client.initialize();
-      } else {
-        const client = clients[sessionData.WABrowserId];
-        if (client) {
-          try {
-            const state = await client.getState();
-            if (state !== "CONNECTED") {
-              clients[sessionData.WABrowserId] = null;
-              socket.emit("error", state);
-            } else {
-              socket.emit("stop-qr");
-              handleActions(client, socket);
-            }
-          } catch (error) {
-            socket.emit("error", "error");
-          }
-        } else {
-          socket.emit("error", state);
-        }
       }
     } catch (error) {
-      socket.emit("error", error);
+      console.log(error);
+      socket.emit("fail", error);
     }
   });
 });
@@ -125,8 +136,6 @@ io.setMaxListeners(0);
 
 app.use(cors());
 
-// app.use("/wa-tools", express.static("public"));
-
 app.get("/test", (req, res) => {
   res.end("Everything is OK :)");
 });
@@ -134,7 +143,7 @@ app.get("/test", (req, res) => {
 app.get("/count", (req, res) => {
   const currentConnection = Object.keys(io.sockets.connected).length;
   res.json({
-    count: currentConnection
+    count: currentConnection,
   });
 });
 
@@ -144,8 +153,6 @@ app.get("/close", (req, res) => {
 });
 
 const port = process.env.PORT || 5000;
-server.listen(port, () => {
-  console.log("Socket is listening on port " + port);
-});
+server.listen(port);
 
-// opn("http://localhost:5000/wa-tools");
+// opn("https://app.mqad21.com/wa-tools-desktop"); //dekstop
