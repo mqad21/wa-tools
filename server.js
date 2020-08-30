@@ -3,7 +3,7 @@ console.log("WELCOME TO WHATSAPP TOOLS - by mqad21"); //dekstop
 const express = require("express");
 const cors = require("cors");
 const { Client } = require("whatsapp-web.js");
-// const opn = require("opn");
+const opn = require("opn");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -155,4 +155,4 @@ app.get("/close", (req, res) => {
 const port = process.env.PORT || 5000;
 server.listen(port);
 
-// opn("https://app.mqad21.com/wa-tools-desktop"); //dekstop
+opn("https://app.mqad21.com/wa-tools-desktop"); //dekstop

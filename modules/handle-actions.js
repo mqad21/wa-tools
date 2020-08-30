@@ -104,7 +104,7 @@ const getContacts = ({ client, response }) => {
 const sendDelayedMessage = ({ client, response, payload }) => {
   const { contacts, time, message, files, id } = payload;
   const now = new Date();
-  now.setHours(now.getHours() + 7);
+  // now.setHours(now.getHours() + 7);
   const diffMilis = Date.parse(time) - now;
   const send = async (response) => {
     for (const contact of contacts) {
