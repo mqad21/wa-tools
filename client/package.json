@@ -1,0 +1,47 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://app.mqad21.com/wa-tools/",
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@nivo/line": "^0.62.0",
+    "collect.js": "^4.28.2",
+    "emoji-mart": "^3.0.0",
+    "material-ui-dropzone": "^3.3.1",
+    "qrcode.react": "^1.0.0",
+    "react": "^16.8.6",
+    "react-cookie": "^4.0.3",
+    "react-csv": "^2.0.3",
+    "react-device-detect": "^1.13.1",
+    "react-dom": "^16.8.6",
+    "react-google-login": "^5.1.21",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-wordcloud": "^1.2.7",
+    "reactn": "^2.2.7",
+    "recharts": "^1.8.5",
+    "socket.io-client": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build2": "react-scripts build && mv build dist",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
